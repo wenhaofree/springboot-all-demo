@@ -29,6 +29,11 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+/**
+ * 首先在发送者端：在默认情况下，消息发送者会采取Round Robin轮询方式把消息发送到不同的MessageQueue(分区队列)，而消费者消费的时候也从多个MessageQueue上拉取消息，这种情况下消息是不能保证顺序的。而只有当一组有序的消息发送到同一个MessageQueue上时，才能利用MessageQueue先进先出的特性保证这一组消息有序。
+ *
+ * 而Broker中一个队列内的消息是可以保证有序的。
+ */
 public class Producer {
     public static void main(String[] args) throws UnsupportedEncodingException {
         try {
@@ -43,6 +48,7 @@ public class Producer {
                     Message msg =
                             new Message("OrderTopicTest", "order_"+orderId, "KEY" + orderId,
                                     ("order_"+orderId+" step " + j).getBytes(RemotingHelper.DEFAULT_CHARSET));
+                    //一组有序消息发送到同一个分区当中。broker才保证有序。
                     SendResult sendResult = producer.send(msg, new MessageQueueSelector() {
                         @Override
                         public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {

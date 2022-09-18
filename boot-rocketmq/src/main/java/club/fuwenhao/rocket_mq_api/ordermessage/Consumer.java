@@ -26,21 +26,23 @@ import org.apache.rocketmq.common.message.MessageExt;
 
 import java.util.List;
 
+/**
+ * 然后在消费者端：消费者会从多个消息队列上去拿消息。这时虽然每个消息队列上的消息是有序的，但是多个队列之间的消息仍然是乱序的。消费者端要保证消息有序，就需要按队列一个一个来取消息，即取完一个队列的消息后，再去取下一个队列的消息。而给consumer注入的MessageListenerOrderly对象，在RocketMQ内部就会通过锁队列的方式保证消息是一个一个队列来取的。MessageListenerConcurrently这个消息监听器则不会锁队列，每次都是从多个Message中取一批数据（默认不超过32条）。因此也无法保证消息有序。
+ */
 public class Consumer {
 
     public static void main(String[] args) throws MQClientException {
         DefaultMQPushConsumer consumer = new DefaultMQPushConsumer("please_rename_unique_group_name_3");
         consumer.setNamesrvAddr("127.0.0.1:9876");
         consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_LAST_OFFSET);
-
         consumer.subscribe("OrderTopicTest", "*");
-
+        //MessageListenerOrderly 对象内部通过锁队列保证消息是一个一个队列取的
         consumer.registerMessageListener(new MessageListenerOrderly() {
             @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
                 context.setAutoCommit(true);
-                for(MessageExt msg:msgs){
-                    System.out.println("收到消息内容 "+new String(msg.getBody()));
+                for (MessageExt msg : msgs) {
+                    System.out.println("收到消息内容 " + new String(msg.getBody()));
                 }
                 return ConsumeOrderlyStatus.SUCCESS;
             }
