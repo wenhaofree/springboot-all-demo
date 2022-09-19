@@ -55,4 +55,7 @@
   
 - 查看topic的情况：
   - bin/kafka-topics.sh --zookeeper 127.0.0.1:2181 --describe --topic test
- 
+
+- 可视化Kafka：
+  - wget https://codeload.github.com/smartloli/kafka-eagle-bin/tar.gz/refs/tags/v3.0.1
+  - 参考资料：https://juejin.cn/post/6971224791793532941#heading-4
