@@ -28,3 +28,6 @@ sql.show属性表示要在日志中打印实际SQL
 - application04.properties: 读写分离示例配置
 
 
+# 面试题：
+- 海量数据冲击MySQL优化方案？
+

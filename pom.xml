@@ -12,6 +12,7 @@
         <module>boot-rocketmq</module>
         <module>boot-kafka</module>
         <module>boot-sharding</module>
+        <module>boot-netty</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
