@@ -19,6 +19,7 @@ public class DubboConsumerDemo implements WebMvcConfigurer {
     }
 
     @Reference(version = "default")
+//    @Reference(version = "async")
     private DemoService demoService;
 
     public static void main(String[] args) throws IOException {

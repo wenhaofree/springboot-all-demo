@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>fwh-dubbo-rpc</module>
+        <module>fwh-dubbo-usefully</module>
     </modules>
 
     <artifactId>boot-dubbo</artifactId>
