@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -19,13 +20,18 @@ public class HttpServerHandler {
             Invocation invocation = JSONObject.parseObject(req.getInputStream(), Invocation.class);
 
             // JDK11之前用
-//            ObjectInputStream ois = new ObjectInputStream(req.getInputStream());
+            ObjectInputStream ois = new ObjectInputStream(req.getInputStream());
 //            Invocation invocation = (Invocation)ois.readObject();
+            String interfaceName = invocation.getInterfaceName();
+            Class aClass = LocalRegister.get(interfaceName);
+            Method method = aClass.getMethod(invocation.getMethodName(), invocation.getParamTypes());
+            String result = (String) method.invoke(aClass.newInstance(), invocation.getParams());
 
-            var interfaceName = invocation.getInterfaceName();
-            var implClass = LocalRegister.get(interfaceName);
-            Method method = implClass.getMethod(invocation.getMethodName(), invocation.getParamTypes());
-            var result = (String) method.invoke(implClass.newInstance(), invocation.getParams());
+            // JDK11之后用
+//            var interfaceName = invocation.getInterfaceName();
+//            var implClass = LocalRegister.get(interfaceName);
+//            Method method = implClass.getMethod(invocation.getMethodName(), invocation.getParamTypes());
+//            var result = (String) method.invoke(implClass.newInstance(), invocation.getParams());
 
             System.out.println("tomcat:" + result);
             IOUtils.write(result, resp.getOutputStream());
