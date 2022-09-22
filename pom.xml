@@ -17,6 +17,7 @@
         <module>boot-dubbo</module>
         <module>boot-elasticSearch</module>
         <module>boot-zookeeper</module>
+        <module>boot-websocket</module>
     </modules>
     <properties>
         <java.version>1.8</java.version>
