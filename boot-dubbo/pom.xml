@@ -12,6 +12,7 @@
     <modules>
         <module>fwh-dubbo-rpc</module>
         <module>fwh-dubbo-usefully</module>
+        <module>fwh-dubbo-simulate</module>
     </modules>
 
     <artifactId>boot-dubbo</artifactId>
